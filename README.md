@@ -32,7 +32,7 @@ cargo run --release
 Queens-cli has their own board format
 
 For example:
-
+```
 6x6|\
 0:0,0;1,0;2,0;2,1;\
 1:0,1;0,2;0,3;1,3;\
@@ -41,13 +41,14 @@ For example:
 4:5,1;5,2;5,3;5,4;\
 5:0,4;1,4;2,4;3,4;4,4;0,5;1,5;2,5;3,5;4,5;5,5;\
 |Q:|X:
+```
 
 Every major value is separated by '|'
 Values:
 1. Board size (width x height)
 2. Regions
     Each region is separated by number (like 0:) and all points that the region has
-    Width and height is separated by ',' and points by ';'.
+    Width and height is separated by `,` and points by `;`.
 3. Queens
     If you for some reason want to put queens on some places. 
     The first value (the Q in example) is the skin that will be used for queens.
