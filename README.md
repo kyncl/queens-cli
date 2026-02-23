@@ -3,6 +3,8 @@
 [![Built With Ratatui](https://img.shields.io/badge/Built_With_Ratatui-000?logo=ratatui&logoColor=fff)](https://ratatui.rs/)
 ![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)
 
+![Showcase](https://raw.githubusercontent.com/kyncl/queens-cli/main/examples/example1.png)
+
 Logical game inspired by Queens game from LinkedIn, but in CLI (please don't sue me, it's just project)
 
 # Manual install
