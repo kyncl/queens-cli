@@ -3,7 +3,7 @@ use crate::app::App;
 impl App {
     pub fn change_position(&mut self, x: i8, y: i8) {
         let pos = &mut self.selected_pos;
-        let board = &mut self.loaded_board;
+        let board = &mut self.board;
         if x > 0 {
             if pos.0 == board.size.0 - 1 {
                 pos.0 = 0;

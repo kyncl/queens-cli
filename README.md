@@ -51,3 +51,5 @@ Values:
     The first value (the Q in example) is the skin that will be used for queens.
 4. Empty places (Normally Xs)
     Same as Queens, but for empty places, where shouldn't be any queens
+
+If you don't like CLI and want to play queens checkout [Queens](https://queensgame.vercel.app/) it's cool

@@ -12,6 +12,8 @@ futures = "0.3.31"
 ratatui = "0.30.0"
 tokio = { version = "1.40.0", features = ["full"] }
 color-eyre = "0.6.3"
+clap = { version = "4.5.60", features = ["derive"] }
+anyhow = "1.0.102"
 
 # Read the optimization guideline for more details: https://ratatui.rs/recipes/apps/release-your-app/#optimizations
 [profile.release]

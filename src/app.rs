@@ -11,7 +11,8 @@ pub struct App {
     pub running: bool,
     pub selected_pos: (u8, u8),
     pub events: EventHandler,
-    pub loaded_board: Board,
+    pub original: Board,
+    pub board: Board,
     pub auto_empty: bool,
     pub msg: String,
     pub did_win: bool,
@@ -19,25 +20,20 @@ pub struct App {
     pub win_time: Option<Duration>,
 }
 
-impl Default for App {
-    fn default() -> Self {
+impl App {
+    pub fn new(board: String) -> Self {
         Self {
             running: true,
             selected_pos: (0, 0),
             events: EventHandler::new(),
-            loaded_board: Board::load_board(),
+            board: Board::load_board(&board),
+            original: Board::load_board(&board),
             auto_empty: true,
             msg: String::new(),
             did_win: false,
             user_time: Instant::now(),
             win_time: None,
         }
-    }
-}
-
-impl App {
-    pub fn new() -> Self {
-        Self::default()
     }
     pub fn tick(&self) {}
     pub fn quit(&mut self) {
@@ -47,19 +43,21 @@ impl App {
         self.auto_empty = !self.auto_empty;
     }
     pub fn restart(&mut self) {
-        let old_board = Board::load_board();
-        let board = &mut self.loaded_board;
-        board.queen_pos = old_board.queen_pos;
-        board.empty_pos = old_board.empty_pos;
+        let old_board = &self.original;
+        let board = &mut self.board;
+        board.queen_pos = old_board.queen_pos.clone();
+        board.empty_pos = old_board.empty_pos.clone();
         self.msg = String::new();
         self.did_win = false;
         self.user_time = Instant::now();
+        self.win_time = None;
+        self.selected_pos = (0, 0);
     }
 
     /// true if the combination is correct
     /// else the string value has msg what is wrong
     pub fn check_win(&mut self) -> (bool, String) {
-        let board = &mut self.loaded_board;
+        let board = &mut self.board;
         let size = board.size.0 as usize;
         let queens = &board.queen_pos;
 
@@ -148,10 +146,10 @@ impl App {
                     AppEvent::Restart => self.restart(),
                     AppEvent::ChangeAutoEmpty => self.change_auto_empty(),
                     AppEvent::ToggleEmpty => {
-                        toggle_empty(&mut self.loaded_board, self.selected_pos, self.auto_empty)
+                        toggle_empty(&mut self.board, self.selected_pos, self.auto_empty)
                     }
                     AppEvent::ToggleQueen => {
-                        toggle_queen(&mut self.loaded_board, self.selected_pos, self.auto_empty);
+                        toggle_queen(&mut self.board, self.selected_pos, self.auto_empty);
                         let (did_win, msg) = self.check_win();
                         if did_win {
                             self.win_time = Some(self.user_time.elapsed());
@@ -160,7 +158,7 @@ impl App {
                         self.msg = msg;
                     }
                     AppEvent::Swap => {
-                        toggle_swap(&mut self.loaded_board, self.selected_pos, self.auto_empty);
+                        toggle_swap(&mut self.board, self.selected_pos, self.auto_empty);
                         let (did_win, msg) = self.check_win();
                         if did_win {
                             self.win_time = Some(self.user_time.elapsed());
