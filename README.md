@@ -21,10 +21,13 @@ cargo build --release
 sudo cp ./target/release/queens-cli ~/.local/bin 
 # or for all users
 sudo cp ./target/release/queens-cli /usr/local/bin
+
+# then just run
+queens-cli -b <board-string>
 ```
 Or just run:
 ```bash
-cargo run --release
+cargo run --release -- -b <board-string>
 ```
 
 
@@ -41,6 +44,12 @@ For example:
 4:5,1;5,2;5,3;5,4;\
 5:0,4;1,4;2,4;3,4;4,4;0,5;1,5;2,5;3,5;4,5;5,5;\
 |Q:|X:
+```
+
+If you want to run it:
+
+```bash
+queens-cli -b '6x6|0:0,0;1,0;2,0;2,1;1:0,1;0,2;0,3;1,3;2:3,0;1,1;2,2;3,1;1,2;3,2;3:4,0;5,0;4,1;4,2;2,3;3,3;4,3;4:5,1;5,2;5,3;5,4;5:0,4;1,4;2,4;3,4;4,4;0,5;1,5;2,5;3,5;4,5;5,5;| :|X:'
 ```
 
 Every major value is separated by '|'
