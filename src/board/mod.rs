@@ -36,11 +36,7 @@ impl BoardMetadata {
             author: author.to_string(),
             users_best,
             difficulty,
-            author_link: if let Some(link) = author_link {
-                Some(link.to_string())
-            } else {
-                None
-            },
+            author_link: author_link.map(|link| link.to_string()),
         }
     }
 }

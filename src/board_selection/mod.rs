@@ -3,7 +3,7 @@ use ratatui::{
     DefaultTerminal,
     buffer::Buffer,
     layout::{Constraint, Flex, Layout, Rect},
-    style::{Color, Modifier, Style},
+    style::{Modifier, Style},
     text::Line,
     widgets::{
         Block, BorderType, Borders, List, ListItem, ListState, Paragraph, StatefulWidget, Widget,
@@ -174,6 +174,12 @@ impl Widget for &mut BoardSelection {
     }
 }
 
+impl Default for BoardSelection {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BoardSelection {
     pub fn new() -> Self {
         let boards = vec![
@@ -284,7 +290,7 @@ impl BoardSelection {
         Self {
             running: true,
             events: EventHandler::new(),
-            boards: boards,
+            boards,
             search_list_state: list_state,
         }
     }
@@ -304,7 +310,7 @@ impl BoardSelection {
     pub fn prev_board(&mut self) {
         let i = match self.search_list_state.selected() {
             Some(i) => {
-                if i <= 0 {
+                if i == 0 {
                     self.boards.len() - 1
                 } else {
                     i - 1
@@ -352,13 +358,26 @@ impl BoardSelection {
     }
     pub fn handle_key_events(&mut self, key_event: KeyEvent) -> color_eyre::Result<()> {
         match key_event.code {
-            KeyCode::Esc | KeyCode::Char('q') => Ok(self.events.send(AppEvent::Quit)),
-            KeyCode::Char('c' | 'C') if key_event.modifiers == KeyModifiers::CONTROL => {
-                Ok(self.events.send(AppEvent::Quit))
+            KeyCode::Esc | KeyCode::Char('q') => {
+                self.events.send(AppEvent::Quit);
+                Ok(())
             }
-            KeyCode::Up => Ok(self.events.send(AppEvent::IncrementYPosition)),
-            KeyCode::Down => Ok(self.events.send(AppEvent::DecrementYPosition)),
-            KeyCode::Enter => Ok(self.events.send(AppEvent::Confirm)),
+            KeyCode::Char('c' | 'C') if key_event.modifiers == KeyModifiers::CONTROL => {
+                self.events.send(AppEvent::Quit);
+                Ok(())
+            }
+            KeyCode::Up => {
+                self.events.send(AppEvent::IncrementYPosition);
+                Ok(())
+            }
+            KeyCode::Down => {
+                self.events.send(AppEvent::DecrementYPosition);
+                Ok(())
+            }
+            KeyCode::Enter => {
+                self.events.send(AppEvent::Confirm);
+                Ok(())
+            }
             _ => Ok(()),
         }
     }
