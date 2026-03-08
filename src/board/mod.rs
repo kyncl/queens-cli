@@ -1,9 +1,51 @@
+use std::time::Duration;
+
+use serde::{Deserialize, Serialize};
+use strum_macros::{AsRefStr, Display, EnumIter};
+
 pub mod empty;
 pub mod player_pos;
 pub mod queen;
 pub mod swapper;
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug, EnumIter, Display, Default, AsRefStr, PartialEq, Clone)]
+pub enum Difficulties {
+    #[default]
+    Easy,
+    Normal,
+    Hard,
+    Extreme,
+}
+
+#[derive(Debug, Clone)]
+pub struct BoardMetadata {
+    // nick/name of board author
+    pub author: String,
+    pub author_link: Option<String>,
+    pub difficulty: Difficulties,
+    pub users_best: Option<Duration>,
+}
+impl BoardMetadata {
+    pub fn new(
+        author: &str,
+        author_link: Option<&str>,
+        difficulty: Difficulties,
+        users_best: Option<Duration>,
+    ) -> Self {
+        Self {
+            author: author.to_string(),
+            users_best,
+            difficulty,
+            author_link: if let Some(link) = author_link {
+                Some(link.to_string())
+            } else {
+                None
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Board {
     pub size: (u8, u8),
     pub regions: Vec<Vec<(u8, u8)>>,
@@ -11,10 +53,11 @@ pub struct Board {
     pub empty_pos: Vec<(u8, u8)>,
     pub queen_skin: String,
     pub empty_skin: String,
+    pub metadata: Option<BoardMetadata>,
 }
 
 impl Board {
-    pub fn load_board(board: &str) -> Board {
+    pub fn load_board(board: &str, metadata: Option<BoardMetadata>) -> Board {
         // "6x6|0:0,0;1,0;2,0;2,1;1:0,1;0,2;0,3;1,3;2:3,0;1,1;2,2;3,1;1,2;3,2;3:4,0;5,0;4,1;4,2;2,3;3,3;4,3;4:5,1;5,2;5,3;5,4;5:0,4;1,4;2,4;3,4;4,4;0,5;1,5;2,5;3,5;4,5;5,5;| :|X:",
         let loaded_board = board;
         let sections: Vec<&str> = loaded_board.split('|').collect();
@@ -65,6 +108,7 @@ impl Board {
             empty_pos,
             queen_skin,
             empty_skin,
+            metadata,
         }
     }
 }

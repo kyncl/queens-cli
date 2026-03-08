@@ -21,13 +21,13 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(board: String) -> Self {
+    pub fn new(board: Board) -> Self {
         Self {
             running: true,
             selected_pos: (0, 0),
             events: EventHandler::new(),
-            board: Board::load_board(&board),
-            original: Board::load_board(&board),
+            board: board.clone(),
+            original: board,
             auto_empty: true,
             msg: String::new(),
             did_win: false,
@@ -166,6 +166,7 @@ impl App {
                         self.did_win = did_win;
                         self.msg = msg;
                     }
+                    AppEvent::Confirm => {}
                 },
             }
         }

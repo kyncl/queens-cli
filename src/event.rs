@@ -43,6 +43,7 @@ pub enum AppEvent {
     /// This will go from none to empty to queen and again
     Swap,
     ChangeAutoEmpty,
+    Confirm,
 }
 
 /// Terminal event handler.
